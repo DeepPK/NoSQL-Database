@@ -1,0 +1,12 @@
+networks:
+  app-network:
+    driver: bridge
+
+#Creating two services for mongodb and python code
+services: 
+    python:
+        build: .                        #building container in current directory
+        ports:
+            - "5001:5001"
+        networks:
+            - app-network

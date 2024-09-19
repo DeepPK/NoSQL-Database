@@ -1,0 +1,59 @@
+version: '3.8'
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  mongodb1:
+    image: mongo:latest
+    container_name: mongodb1
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+    volumes:
+      - mongodb1-data:/data/db
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      start_period: 10s
+
+  mongodb2:
+    image: mongo:latest
+    container_name: mongodb2
+    restart: always
+    ports:
+      - "27018:27018"
+    networks:
+      - app-network
+    volumes:
+      - mongodb2-data:/data/db
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27018"]
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      start_period: 10s
+
+  mongodb3:
+    image: mongo:latest
+    container_name: mongodb3
+    restart: always
+    ports:
+      - "27019:27019"
+    networks:
+      - app-network
+    volumes:
+      - mongodb3-data:/data/db
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27019"]
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      start_period: 10s
+
+volumes:
+  mongodb1-data:
+  mongodb2-data:
+  mongodb3-data:
